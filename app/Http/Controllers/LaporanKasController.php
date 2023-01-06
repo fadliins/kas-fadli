@@ -53,7 +53,7 @@ class LaporanKasController extends Controller
     {
         $kasMasukData = KasMasuk::where('user_id', request('user_id'))->get();
         $kasKeluarData = KasKeluar::where('user_id', request('user_id'))->get();
-        $userData = User::where('id', request('user_id'))->get();
+        $userData = User::where('_id', request('user_id'))->get();
         $laporanData = LaporanKas::where('user_id', request('user_id'))->get();
         return view('dashboard.admin.member',[
             'user' => $userData,

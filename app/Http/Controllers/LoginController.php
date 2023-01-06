@@ -12,10 +12,10 @@ class LoginController extends Controller
     public function index(){
         return view('account.login', []);
     }
-    
+
     public function authenticate(Request $request){
         $credentials = $request->validate([
-            'username' => ['required'],
+            'user_name' => ['required'],
             'password' => ['required'],
         ]);
 
@@ -29,11 +29,11 @@ class LoginController extends Controller
 
     public function logout(Request $request){
         Auth::logout();
-    
+
         $request->session()->invalidate();
-    
+
         $request->session()->regenerateToken();
-    
+
         return redirect('/');
     }
 }

@@ -14,9 +14,9 @@
         @enderror
     </div>
     <div class="form-floating mb-1">
-        <input type="username" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="username" value="{{ old('username') }}" required>
+        <input type="username" class="form-control @error('user_name') is-invalid @enderror" name="user_name" id="username" placeholder="username" value="{{ old('username') }}" required>
         <label for="username">Username</label>
-        @error('username')
+        @error('user_name')
           <div class="invalid-feedback">
             {{ $message }}
           </div>

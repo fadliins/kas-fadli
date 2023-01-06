@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('kas_keluars', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
+            // $table->id();
+            $table->string('user_name');
             $table->integer('uang_keluar');
             $table->timestamps();
         });

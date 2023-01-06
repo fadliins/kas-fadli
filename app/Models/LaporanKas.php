@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class LaporanKas extends Model
 {
@@ -16,6 +18,6 @@ class LaporanKas extends Model
     }
     public function getRouteKeyName()
     {
-        return 'user_id';
+        return 'user_name';
     }
 }

@@ -7,6 +7,7 @@ use App\Models\KasKeluar;
 use App\Models\LaporanKas;
 use App\Models\KasMasuk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class KasKeluarController extends Controller
 {
@@ -19,7 +20,7 @@ class KasKeluarController extends Controller
     {
         $this->updateKas();
         return view('dashboard.member.kasKeluar', [
-            'kaskeluar' => KasKeluar::where('user_id', auth()->user()->id)->get()
+            'kaskeluar' => KasKeluar::where('user_name', auth()->user()->user_name)->get()
         ]);
     }
 
@@ -45,8 +46,9 @@ class KasKeluarController extends Controller
             'uang_keluar' => ['required','numeric','digits_between:3,10']
         ]);
 
-        $validateData['user_id'] = auth()->user()->id;
-        
+        $validateData['user_name'] = auth()->user()->user_name;
+        $validateData['uang_keluar'] = (int)$validateData['uang_keluar'];
+
         KasKeluar::create($validateData);
 
         return redirect('dashboard/member/kas-keluar')->with('success', 'Data Berhasil Di input!');
@@ -89,9 +91,10 @@ class KasKeluarController extends Controller
             'uang_keluar' => ['required','numeric','digits_between:3,10']
         ]);
 
-        $validateData['user_id'] = auth()->user()->id;
-        
-        KasKeluar::where('id', $kasKeluar->id)
+        $validateData['user_name'] = auth()->user()->user_name;
+        $validateData['uang_keluar'] = (int)$validateData['uang_keluar'];
+
+        KasKeluar::where('_id', $kasKeluar->id)
                         ->update($validateData);
 
         return redirect('dashboard/member/kas-keluar')->with('success', 'Data Berhasil Di Edit!');
@@ -110,16 +113,14 @@ class KasKeluarController extends Controller
         return redirect('dashboard/member/kas-keluar')->with('success', 'Data Berhasil Di hapus!');
     }
     public function updateKas(){
-        $laporanKas = LaporanKas::where('user_id', auth()->user()->id)->first();
-        $kasMasukCheck = KasMasuk::where('user_id', auth()->user()->id)->first();
-        $kasKeluarCheck = KasKeluar::where('user_id', auth()->user()->id)->first();
+        $laporanKas = LaporanKas::where('user_name', auth()->user()->user_name)->first();
+        $kasMasukCheck = KasMasuk::where('user_name', auth()->user()->user_name)->first();
+        $kasKeluarCheck = KasKeluar::where('user_name', auth()->user()->user_name)->first();
         if($kasMasukCheck === null || $kasKeluarCheck === null){
-            return view('dashboard.member.kasMasuk', [
-                'kasmasuk' => KasMasuk::where('user_id', auth()->user()->id)->get()
-            ]); 
+            return 0;
         }else{
-            $kasMasukTotal = KasMasuk::where('user_id', auth()->user()->id)->sum('uang_masuk');
-            $kasKeluarTotal = KasKeluar::where('user_id', auth()->user()->id)->sum('uang_keluar');
+            $kasMasukTotal = KasMasuk::where('user_name', auth()->user()->user_name)->sum('uang_masuk');
+            $kasKeluarTotal = KasKeluar::where('user_name', auth()->user()->user_name)->sum('uang_keluar');
             $kasTotal = $kasMasukTotal - $kasKeluarTotal;
             if($kasTotal < 0){
                 $status = 'Tidak Bagus';
@@ -130,12 +131,12 @@ class KasKeluarController extends Controller
             }
             if($laporanKas === null){
                 LaporanKas::create([
-                    'user_id' => auth()->user()->id,
+                    'user_name' => auth()->user()->user_name,
                     'total_kas' => $kasTotal,
                     'status' => $status
                 ]);
             }else{
-                LaporanKas::where('id', $laporanKas->id)
+                LaporanKas::where('id', $laporanKas->_id)
                             ->update([
                                 'total_kas' => $kasTotal,
                                 'status' => $status
