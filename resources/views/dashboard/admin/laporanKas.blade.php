@@ -19,7 +19,7 @@
           @foreach ($laporan as $lapor)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $lapor->user->name }}</td>
+            <td>{{ $lapor->user_name }}</td>
             <td>{{ $lapor->total_kas }}</td>
             <td>{{ $lapor->status }}</td>
             <td><a href="/dashboard/admin/laporan/{{ $lapor->user_id }}?user_id={{ $lapor->user_id }}" class="badge bg-success"><span data-feather="arrow-right-circle"></span></a></td>
@@ -29,3 +29,4 @@
       </table>
     </div>
 @endsection
+
